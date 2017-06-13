@@ -12,6 +12,20 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PropertyDay
 {
+    const MONDAY    = 'Mon';
+    const TUESDAY   = 'Tue';
+    const WEDNESDAY = 'Wed';
+    const THURSDAY  = 'Thu';
+    const FRIDAY    = 'Fri';
+    const SATURDAY  = 'Sat';
+    const SUNDAY    = 'Sun';
+
+    private $weekdays = [
+        self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY
+    ];
+
+    private $weekends = [self::SATURDAY, self::SUNDAY];
+
     /**
      * @var int
      *
@@ -69,7 +83,7 @@ class PropertyDay
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -81,7 +95,7 @@ class PropertyDay
      *
      * @return PropertyDay
      */
-    public function setPrice($price)
+    public function setPrice($price): PropertyDay
     {
         $this->price = $price;
 
@@ -93,7 +107,7 @@ class PropertyDay
      *
      * @return string
      */
-    public function getPrice()
+    public function getPrice(): string
     {
         return $this->price;
     }
@@ -105,9 +119,12 @@ class PropertyDay
      *
      * @return PropertyDay
      */
-    public function setDate($date)
+    public function setDate(\DateTime $date): PropertyDay
     {
         $this->date = $date;
+        $this->dayOfTheWeek = $date->format('D');
+        $this->isWeekday = in_array($this->dayOfTheWeek, $this->getWeekdays(), true);
+        $this->isWeekend = in_array($this->dayOfTheWeek, $this->getWeekends(), true);
 
         return $this;
     }
@@ -117,23 +134,19 @@ class PropertyDay
      *
      * @return \DateTime
      */
-    public function getDate()
+    public function getDate(): \DateTime
     {
         return $this->date;
     }
 
     /**
-     * Set isWeekday
+     * A textual representation of a day, three letters, e.g. 'Mon'
      *
-     * @param boolean $isWeekday
-     *
-     * @return PropertyDay
+     * @return string
      */
-    public function setIsWeekday($isWeekday)
+    public function getDayOfTheWeek(): string
     {
-        $this->isWeekday = $isWeekday;
-
-        return $this;
+        return $this->dayOfTheWeek;
     }
 
     /**
@@ -141,23 +154,9 @@ class PropertyDay
      *
      * @return bool
      */
-    public function getIsWeekday()
+    public function isWeekday(): bool
     {
         return $this->isWeekday;
-    }
-
-    /**
-     * Set isWeekend
-     *
-     * @param boolean $isWeekend
-     *
-     * @return PropertyDay
-     */
-    public function setIsWeekend($isWeekend)
-    {
-        $this->isWeekend = $isWeekend;
-
-        return $this;
     }
 
     /**
@@ -165,47 +164,9 @@ class PropertyDay
      *
      * @return bool
      */
-    public function isWeekend()
+    public function isWeekend(): bool
     {
         return $this->isWeekend;
-    }
-
-    /**
-     * Set dayOfTheWeek
-     *
-     * @param string $dayOfTheWeek
-     *
-     * @return PropertyDay
-     */
-    public function setDayOfTheWeek($dayOfTheWeek)
-    {
-        $this->dayOfTheWeek = $dayOfTheWeek;
-
-        return $this;
-    }
-
-    /**
-     * Get dayOfTheWeek
-     *
-     * @return string
-     */
-    public function getDayOfTheWeek()
-    {
-        return $this->dayOfTheWeek;
-    }
-
-    /**
-     * Set isBooked
-     *
-     * @param boolean $isBooked
-     *
-     * @return PropertyDay
-     */
-    public function setIsBooked($isBooked)
-    {
-        $this->isBooked = $isBooked;
-
-        return $this;
     }
 
     /**
@@ -213,8 +174,26 @@ class PropertyDay
      *
      * @return bool
      */
-    public function isBooked()
+    public function isBooked(): bool
     {
         return $this->isBooked;
+    }
+
+    /**
+     * Return array of the weekends days, e.g. ['Sun', 'Sat']
+     * @return array
+     */
+    public function getWeekends(): array
+    {
+        return $this->weekends;
+    }
+
+    /**
+     * Return array of the weekdays, e.g. ['Mon', 'Thu']
+     * @return array
+     */
+    public function getWeekdays(): array
+    {
+        return $this->weekdays;
     }
 }
