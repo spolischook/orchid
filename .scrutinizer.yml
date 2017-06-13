@@ -1,0 +1,9 @@
+checks:
+    php: true
+
+tools:
+    external_code_coverage: true
+
+filter:
+    paths: ['src/*']
+    excluded_paths: ['src/*Bundle/Tests/*', 'tests/*']
