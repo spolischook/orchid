@@ -5,7 +5,7 @@ Install
 -------
 
 ```bash
-git clone
+git clone https://github.com/spolischook/orchid.git
 composer install
 app/console server:run
 ```
