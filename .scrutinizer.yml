@@ -7,6 +7,6 @@ tools:
 filter:
     paths: ['src/*']
     excluded_paths:
-      - 'src/*Bundle/Tests/*',
+      - 'src/*Bundle/Tests/*'
       - 'tests/*'
       - 'var/SymfonyRequirements.php'
