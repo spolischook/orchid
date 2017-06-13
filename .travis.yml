@@ -1,0 +1,27 @@
+language: php
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+matrix:
+  fast_finish: true
+  include:
+    - php: '7.1'
+      env: TARGET=phpcs
+    - php: '7.1'
+      env: TARGET=phpmd
+    - php: '7.1'
+      env: TARGET=phpunit
+
+before_script:
+  - wget https://phar.phpunit.de/phpunit-6.1.phar
+  - chmod +x phpunit-6.1.phar
+  - composer self-update
+  - composer install
+
+script:
+  - phpunit-6.1.phar
+  - if [ "$TARGET" = "phpmd" ];   then bin/phpmd ./src text; fi
+  - if [ "$TARGET" = "phpcs" ];   then bin/phpcs ./src --standard=PSR2 --extensions=php -p; fi
+  - if [ "$TARGET" = "phpunit" ]; then phpunit-6.1.phar --coverage-clover=coverage.clover; fi

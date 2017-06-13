@@ -165,7 +165,7 @@ class PropertyDay
      *
      * @return bool
      */
-    public function getIsWeekend()
+    public function isWeekend()
     {
         return $this->isWeekend;
     }
@@ -213,9 +213,8 @@ class PropertyDay
      *
      * @return bool
      */
-    public function getIsBooked()
+    public function isBooked()
     {
         return $this->isBooked;
     }
 }
-

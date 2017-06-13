@@ -63,4 +63,3 @@ class Property
         return $this->attributes;
     }
 }
-
