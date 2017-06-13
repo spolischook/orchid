@@ -21,6 +21,6 @@ before_script:
   - composer install
 
 script:
-  - if [ "$TARGET" = "phpmd" ];   then bin/phpmd ./src text; fi
+  - if [ "$TARGET" = "phpmd" ];   then bin/phpmd ./src text ./phpmd-ruleset.xml; fi
   - if [ "$TARGET" = "phpcs" ];   then bin/phpcs ./src --standard=PSR2 --extensions=php -p; fi
   - if [ "$TARGET" = "phpunit" ]; then php phpunit-6.1.phar --coverage-clover=coverage.clover; fi
