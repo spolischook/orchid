@@ -201,16 +201,6 @@ class PropertyDay
     }
 
     /**
-     * Get isBooked
-     *
-     * @return bool
-     */
-    public function isBooked(): bool
-    {
-        return $this->isBooked;
-    }
-
-    /**
      * Return array of the weekends days, e.g. ['Sun', 'Sat']
      * @return array
      */
@@ -226,26 +216,6 @@ class PropertyDay
     public function getWeekdays(): array
     {
         return $this->weekdays;
-    }
-
-    /**
-     * Get isWeekday
-     *
-     * @return boolean
-     */
-    public function getIsWeekday()
-    {
-        return $this->isWeekday;
-    }
-
-    /**
-     * Get isWeekend
-     *
-     * @return boolean
-     */
-    public function getIsWeekend()
-    {
-        return $this->isWeekend;
     }
 
     /**
@@ -265,9 +235,9 @@ class PropertyDay
     /**
      * Get isBooked
      *
-     * @return boolean
+     * @return bool
      */
-    public function getIsBooked()
+    public function isBooked(): bool
     {
         return $this->isBooked;
     }
