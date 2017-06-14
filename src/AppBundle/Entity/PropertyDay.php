@@ -36,9 +36,16 @@ class PropertyDay
     private $id;
 
     /**
+     * @var
+     *
+     * @ORM\ManyToOne(targetEntity="Property", inversedBy="propertyDays")
+     */
+    private $property;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="price", type="decimal", precision=2, scale=0, nullable=true)
+     * @ORM\Column(name="price", type="integer")
      */
     private $price;
 
@@ -66,7 +73,7 @@ class PropertyDay
     /**
      * @var string
      *
-     * @ORM\Column(name="dayOfTheWeek", type="string", length=255)
+     * @ORM\Column(name="dayOfTheWeek", type="string", length=3)
      */
     private $dayOfTheWeek;
 
@@ -77,7 +84,6 @@ class PropertyDay
      */
     private $isBooked;
 
-
     /**
      * Get id
      *
@@ -86,6 +92,31 @@ class PropertyDay
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Set property
+     *
+     * @param Property $property
+     *
+     * @return PropertyDay
+     */
+    public function setProperty(Property $property = null): PropertyDay
+    {
+        $this->property = $property;
+        $property->addPropertyDay($this);
+
+        return $this;
+    }
+
+    /**
+     * Get property
+     *
+     * @return Property
+     */
+    public function getProperty(): Property
+    {
+        return $this->property;
     }
 
     /**
@@ -195,5 +226,49 @@ class PropertyDay
     public function getWeekdays(): array
     {
         return $this->weekdays;
+    }
+
+    /**
+     * Get isWeekday
+     *
+     * @return boolean
+     */
+    public function getIsWeekday()
+    {
+        return $this->isWeekday;
+    }
+
+    /**
+     * Get isWeekend
+     *
+     * @return boolean
+     */
+    public function getIsWeekend()
+    {
+        return $this->isWeekend;
+    }
+
+    /**
+     * Set isBooked
+     *
+     * @param boolean $isBooked
+     *
+     * @return PropertyDay
+     */
+    public function setIsBooked($isBooked)
+    {
+        $this->isBooked = $isBooked;
+
+        return $this;
+    }
+
+    /**
+     * Get isBooked
+     *
+     * @return boolean
+     */
+    public function getIsBooked()
+    {
+        return $this->isBooked;
     }
 }

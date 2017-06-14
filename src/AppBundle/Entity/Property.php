@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,12 +24,23 @@ class Property
     private $id;
 
     /**
-     * @var array
+     * @var Attribute[]|Collection
      *
-     * @ORM\Column(name="attributes", type="json_array", nullable=true)
+     * @ORM\ManyToMany(targetEntity="Attribute", inversedBy="properties")
      */
     private $attributes;
 
+    /**
+     * @var PropertyDay[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="PropertyDay", mappedBy="property")
+     */
+    private $propertyDays;
+
+    public function __construct()
+    {
+        $this->attributes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -40,26 +53,71 @@ class Property
     }
 
     /**
-     * Set attributes
+     * Add attribute
      *
-     * @param array $attributes
+     * @param Attribute $attribute
      *
      * @return Property
      */
-    public function setAttributes($attributes)
+    public function addAttribute(Attribute $attribute)
     {
-        $this->attributes = $attributes;
+        $attribute->addProperty($this);
+        $this->attributes[] = $attribute;
 
         return $this;
     }
 
     /**
+     * Remove attribute
+     *
+     * @param Attribute $attribute
+     */
+    public function removeAttribute(Attribute $attribute)
+    {
+        $this->attributes->removeElement($attribute);
+    }
+
+    /**
      * Get attributes
      *
-     * @return array
+     * @return Collection
      */
     public function getAttributes()
     {
         return $this->attributes;
+    }
+
+    /**
+     * Add propertyDay
+     *
+     * @param \AppBundle\Entity\PropertyDay $propertyDay
+     *
+     * @return Property
+     */
+    public function addPropertyDay(\AppBundle\Entity\PropertyDay $propertyDay)
+    {
+        $this->propertyDays[] = $propertyDay;
+
+        return $this;
+    }
+
+    /**
+     * Remove propertyDay
+     *
+     * @param \AppBundle\Entity\PropertyDay $propertyDay
+     */
+    public function removePropertyDay(\AppBundle\Entity\PropertyDay $propertyDay)
+    {
+        $this->propertyDays->removeElement($propertyDay);
+    }
+
+    /**
+     * Get propertyDays
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPropertyDays()
+    {
+        return $this->propertyDays;
     }
 }
