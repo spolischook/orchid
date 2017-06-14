@@ -23,6 +23,7 @@ before_script:
 script:
   - if [ "$TARGET" = "phpmd" ];   then bin/phpmd ./src text ./phpmd-ruleset.xml --exclude Tests/ ; fi
   - if [ "$TARGET" = "phpcs" ];   then bin/phpcs ./src --standard=PSR2 --extensions=php -p; fi
+  - if [ "$TARGET" = "phpunit" ]; then bash bin/reload.sh; fi
   - if [ "$TARGET" = "phpunit" ]; then php phpunit-6.1.phar --coverage-clover=coverage.clover; fi
   - if [ "$TARGET" = "phpunit" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
   - if [ "$TARGET" = "phpunit" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
