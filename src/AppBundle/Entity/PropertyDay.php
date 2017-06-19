@@ -3,11 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * PropertyDay
  *
- * @ORM\Table(name="property_day")
+ * @ORM\Table(
+ *     name="property_day",
+ *     uniqueConstraints={@ORM\UniqueConstraint(
+ *          name="property_day", columns={"property_id", "date"}
+ *     )}
+ * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PropertyDayRepository")
  */
 class PropertyDay
@@ -20,10 +26,18 @@ class PropertyDay
     const SATURDAY  = 'Sat';
     const SUNDAY    = 'Sun';
 
+    /**
+     * @var array
+     * @JMS\Exclude
+     */
     private $weekdays = [
         self::MONDAY, self::TUESDAY, self::WEDNESDAY, self::THURSDAY, self::FRIDAY
     ];
 
+    /**
+     * @var array
+     * @JMS\Exclude
+     */
     private $weekends = [self::SATURDAY, self::SUNDAY];
 
     /**
@@ -32,6 +46,7 @@ class PropertyDay
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Exclude
      */
     private $id;
 
@@ -39,6 +54,7 @@ class PropertyDay
      * @var
      *
      * @ORM\ManyToOne(targetEntity="Property", inversedBy="propertyDays")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
      */
     private $property;
 
@@ -46,13 +62,24 @@ class PropertyDay
      * @var string
      *
      * @ORM\Column(name="price", type="integer")
+     * @JMS\Groups({"property_list"})
      */
     private $price;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="available", type="integer")
+     * @JMS\Groups({"property_list"})
+     */
+    private $available;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
+     * @JMS\Groups({"property_list"})
+     * @JMS\Type("DateTime<'Y-m-d'>")
      */
     private $date;
 
@@ -78,11 +105,18 @@ class PropertyDay
     private $dayOfTheWeek;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="isBooked", type="boolean")
+     * @ORM\Column(name="month", type="smallint")
      */
-    private $isBooked;
+    private $month;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="year", type="smallint")
+     */
+    private $year;
 
     /**
      * Get id
@@ -101,7 +135,7 @@ class PropertyDay
      *
      * @return PropertyDay
      */
-    public function setProperty(Property $property = null): PropertyDay
+    public function setProperty(Property $property): PropertyDay
     {
         $this->property = $property;
         $property->addPropertyDay($this);
@@ -156,6 +190,8 @@ class PropertyDay
         $this->dayOfTheWeek = $date->format('D');
         $this->isWeekday = in_array($this->dayOfTheWeek, $this->getWeekdays(), true);
         $this->isWeekend = in_array($this->dayOfTheWeek, $this->getWeekends(), true);
+        $this->month = $date->format('m');
+        $this->year = $date->format('Y');
 
         return $this;
     }
@@ -221,24 +257,62 @@ class PropertyDay
     /**
      * Set isBooked
      *
-     * @param boolean $isBooked
+     * @param int $available
      *
      * @return PropertyDay
      */
-    public function setIsBooked($isBooked)
+    public function setAvailable(int $available): PropertyDay
     {
-        $this->isBooked = $isBooked;
+        $this->available = $available;
 
         return $this;
     }
 
     /**
-     * Get isBooked
-     *
-     * @return bool
+     * @return int
      */
-    public function isBooked(): bool
+    public function getAvailable(): int
     {
-        return $this->isBooked;
+        return $this->available;
+    }
+
+    /**
+     * @param int $month
+     *
+     * @return PropertyDay
+     */
+    public function setMonth(int $month): PropertyDay
+    {
+        $this->month = $month;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMonth(): int
+    {
+        return $this->month;
+    }
+
+    /**
+     * @param int $year
+     *
+     * @return PropertyDay
+     */
+    public function setYear(int $year): PropertyDay
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYear(): int
+    {
+        return $this->year;
     }
 }

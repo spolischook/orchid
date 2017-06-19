@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Property
@@ -20,26 +21,35 @@ class Property
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Groups({"property_list"})
      */
     private $id;
 
     /**
-     * @var Attribute[]|Collection
+     * @var string
      *
-     * @ORM\ManyToMany(targetEntity="Attribute", inversedBy="properties")
+     * @ORM\Column(name="title", type="string")
      */
-    private $attributes;
+    private $title;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="inventory", type="integer")
+     */
+    private $inventory;
 
     /**
      * @var PropertyDay[]|Collection
      *
      * @ORM\OneToMany(targetEntity="PropertyDay", mappedBy="property")
+     * @JMS\Groups({"property_list"})
      */
     private $propertyDays;
 
     public function __construct()
     {
-        $this->attributes = new ArrayCollection();
+        $this->propertyDays = new ArrayCollection();
     }
 
     /**
@@ -47,54 +57,58 @@ class Property
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * Add attribute
-     *
-     * @param Attribute $attribute
+     * @param string $title
      *
      * @return Property
      */
-    public function addAttribute(Attribute $attribute)
+    public function setTitle(string $title): Property
     {
-        $attribute->addProperty($this);
-        $this->attributes[] = $attribute;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Remove attribute
-     *
-     * @param Attribute $attribute
+     * @return string
      */
-    public function removeAttribute(Attribute $attribute)
+    public function getTitle(): string
     {
-        $this->attributes->removeElement($attribute);
+        return $this->title;
     }
 
     /**
-     * Get attributes
+     * @param int $inventory
      *
-     * @return Collection
+     * @return Property
      */
-    public function getAttributes()
+    public function setInventory(int $inventory): Property
     {
-        return $this->attributes;
+        $this->inventory = $inventory;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInventory(): int
+    {
+        return $this->inventory;
     }
 
     /**
      * Add propertyDay
      *
-     * @param \AppBundle\Entity\PropertyDay $propertyDay
+     * @param PropertyDay $propertyDay
      *
      * @return Property
      */
-    public function addPropertyDay(\AppBundle\Entity\PropertyDay $propertyDay)
+    public function addPropertyDay(PropertyDay $propertyDay): Property
     {
         $this->propertyDays[] = $propertyDay;
 
@@ -104,9 +118,9 @@ class Property
     /**
      * Remove propertyDay
      *
-     * @param \AppBundle\Entity\PropertyDay $propertyDay
+     * @param PropertyDay $propertyDay
      */
-    public function removePropertyDay(\AppBundle\Entity\PropertyDay $propertyDay)
+    public function removePropertyDay(PropertyDay $propertyDay)
     {
         $this->propertyDays->removeElement($propertyDay);
     }
@@ -114,9 +128,9 @@ class Property
     /**
      * Get propertyDays
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection|PropertyDay[]
      */
-    public function getPropertyDays()
+    public function getPropertyDays(): Collection
     {
         return $this->propertyDays;
     }

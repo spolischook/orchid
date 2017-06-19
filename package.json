@@ -1,0 +1,27 @@
+{
+  "name": "orchid",
+  "version": "0.1.0",
+  "description": "Test task",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "dependencies": {
+    "swagger-ui-dist": "^3.0.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spolischook/orchid.git"
+  },
+  "author": "Serhii Polishchuk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spolischook/orchid/issues"
+  },
+  "homepage": "https://github.com/spolischook/orchid#readme"
+}

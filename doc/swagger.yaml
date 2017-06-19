@@ -1,0 +1,135 @@
+swagger: '2.0'
+info:
+  version: 0.1.0
+  title: Orchid Project
+  description: Zenrooms Test Task
+  contact:
+    name: spolischook@gmail.com
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+basePath: /
+schemes:
+  - http
+paths:
+  /properties/calendar:
+    get:
+      description: Returns a collection of properties and its property days
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: year
+          description: By default current year
+          type: integer
+        - in: query
+          name: month
+          description: By default current month
+          minimum: 1
+          maximum: 12
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            'ValidationError-{query-parameter-name}':
+              type: string
+              description: Validation error applied to query parameter
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Property'
+        '400':
+          description: If invalid values was delivered with request parameters
+  '/propertyDays/{id}/attributes':
+    patch:
+      description: Update properties availability and price
+      parameters:
+        - in: path
+          name: id
+          description: Property identificator
+          required: true
+          type: integer
+        - in: query
+          name: dateFrom
+          description: YYYY-MM-DD
+          required: true
+          type: string
+          format: date
+        - in: query
+          name: dateTo
+          description: YYYY-MM-DD
+          required: true
+          type: string
+          format: date
+        - in: query
+          name: dotw
+          description: 'Days of the week [Mon,Tue,Wed,Thu,Fri,Sat,Sun]'
+          type: array
+          items:
+            type: string
+            enum:
+              - Mon
+              - Tue
+              - Wed
+              - Thu
+              - Fri
+              - Sat
+              - Sun
+        - name: propertyAttributes
+          in: body
+          description: See <b>PropertyAttibute</b> model
+          required: true
+          schema:
+            $ref: '#/definitions/PropertyDayAttributes'
+      responses:
+        '204':
+          description: Successful update
+        '404':
+          description: If property with given id was not found
+  '/propertyDays/{id}':
+    patch:
+      description: Update property availability and price
+      parameters:
+        - in: path
+          name: id
+          description: Property identificator
+          required: true
+          type: integer
+        - name: propertyDay
+          in: body
+          description: Data for day patch update
+          required: true
+          schema:
+            $ref: '#/definitions/PropertyDay'
+      responses:
+        '204':
+          description: Successful update
+        '404':
+          description: If property with given id was not found
+definitions:
+  Property:
+    type: object
+    properties:
+      title:
+        type: string
+      inventory:
+        type: integer
+      propertyDays:
+        type: array
+        items:
+          $ref: '#/definitions/PropertyDay'
+  PropertyDay:
+    type: object
+    properties:
+      date:
+        type: string
+      attributes:
+        $ref: '#/definitions/PropertyDayAttributes'
+  PropertyDayAttributes:
+    type: object
+    properties:
+      available:
+        type: integer
+      price:
+        type: integer

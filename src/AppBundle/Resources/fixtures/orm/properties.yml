@@ -1,0 +1,19 @@
+AppBundle\Entity\Property:
+  single_room_property:
+    title: 'Single Room'
+    inventory: 5
+  double_room_property:
+    title: 'Double Room'
+    inventory: 5
+
+AppBundle\Entity\PropertyDay:
+  property_day_s_{1..60}:
+    price: 100
+    date: <todayPlusDay(<current()>)>
+    property: '@single_room_property'
+    available: 5
+  property_day_d_{1..60}:
+    price: 100
+    date: <todayPlusDay(<current()>)>
+    property: '@double_room_property'
+    available: 5
