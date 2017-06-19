@@ -53,6 +53,9 @@ class PropertyCalendarRepository
         return $calendar;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function patch(PropertyCalendar $propertyCalendar)
     {
     }

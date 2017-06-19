@@ -156,11 +156,11 @@ class PropertyDay
     /**
      * Set price
      *
-     * @param string $price
+     * @param int $price
      *
      * @return PropertyDay
      */
-    public function setPrice($price): PropertyDay
+    public function setPrice(int $price): PropertyDay
     {
         $this->price = $price;
 

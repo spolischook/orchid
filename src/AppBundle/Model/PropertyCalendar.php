@@ -75,6 +75,9 @@ class PropertyCalendar
         return $this->property;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
     public function cmp($a, $b)
     {
         $aDate = new \DateTime($a);
