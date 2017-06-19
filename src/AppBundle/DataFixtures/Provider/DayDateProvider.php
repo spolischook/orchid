@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\DataFixtures\Faker\Provider;
+namespace AppBundle\DataFixtures\Provider;
 
 class DayDateProvider
 {

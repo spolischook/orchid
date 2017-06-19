@@ -21,7 +21,7 @@ class Property
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @JMS\Groups({"property_list"})
+     * @JMS\Groups({"property_calendar"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Property
      * @var string
      *
      * @ORM\Column(name="title", type="string")
-     * @JMS\Groups({"property_list"})
+     * @JMS\Groups({"property_calendar"})
      */
     private $title;
 
@@ -44,7 +44,6 @@ class Property
      * @var PropertyDay[]|Collection
      *
      * @ORM\OneToMany(targetEntity="PropertyDay", mappedBy="property")
-     * @JMS\Groups({"property_list"})
      */
     private $propertyDays;
 

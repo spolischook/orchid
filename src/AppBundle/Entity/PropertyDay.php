@@ -59,26 +59,26 @@ class PropertyDay
     private $property;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="price", type="integer")
-     * @JMS\Groups({"property_list"})
+     * @ORM\Column(name="price", type="integer", nullable=true)
+     * @JMS\Groups({"property_calendar"})
      */
-    private $price;
+    private $price = null;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="available", type="integer")
-     * @JMS\Groups({"property_list"})
+     * @ORM\Column(name="available", type="integer", nullable=true)
+     * @JMS\Groups({"property_calendar"})
      */
-    private $available;
+    private $available = null;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
-     * @JMS\Groups({"property_list"})
+     * @JMS\Groups({"property_calendar"})
      * @JMS\Type("DateTime<'Y-m-d'>")
      */
     private $date;
@@ -170,9 +170,9 @@ class PropertyDay
     /**
      * Get price
      *
-     * @return string
+     * @return int
      */
-    public function getPrice(): string
+    public function getPrice(): ?int
     {
         return $this->price;
     }
@@ -271,21 +271,9 @@ class PropertyDay
     /**
      * @return int
      */
-    public function getAvailable(): int
+    public function getAvailable(): ?int
     {
         return $this->available;
-    }
-
-    /**
-     * @param int $month
-     *
-     * @return PropertyDay
-     */
-    public function setMonth(int $month): PropertyDay
-    {
-        $this->month = $month;
-
-        return $this;
     }
 
     /**
@@ -294,18 +282,6 @@ class PropertyDay
     public function getMonth(): int
     {
         return $this->month;
-    }
-
-    /**
-     * @param int $year
-     *
-     * @return PropertyDay
-     */
-    public function setYear(int $year): PropertyDay
-    {
-        $this->year = $year;
-
-        return $this;
     }
 
     /**

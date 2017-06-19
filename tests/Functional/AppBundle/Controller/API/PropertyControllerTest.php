@@ -2,32 +2,19 @@
 
 namespace Tests\Functional\AppBundle\Controller\API;
 
-use AppBundle\Entity\Property;
+use AppBundle\Model\PropertyCalendar;
 use AppBundle\Model\RequestValidationErrorList;
-use Doctrine\ORM\EntityManager;
-use Nelmio\Alice\Loader\NativeLoader;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\NullOutput;
+use Tests\Functional\AbstractFixtureTestCase;
 
-class PropertyControllerTest extends WebTestCase
+class PropertyControllerTest extends AbstractFixtureTestCase
 {
-    /**
-     * @var Client
-     */
-    protected static $client;
-
     /**
      * @before
      */
     public function setupFixtures()
     {
-        self::$client = static::createClient();
+        static::$client = static::createClient();
         $this->loadDevFixtures();
     }
 
@@ -73,6 +60,25 @@ class PropertyControllerTest extends WebTestCase
         }
     }
 
+    public function testCalendarResource()
+    {
+        self::$client->request('GET', '/properties/calendar', ['month' => 6, 'year' => 2017]);
+        $response = self::$client->getResponse();
+        $models = self::$client->getContainer()->get('jms_serializer')->deserialize(
+            $response->getContent(),
+            'array<'.PropertyCalendar::class.'>',
+            'json'
+        );
+
+        $this->assertCount(2, $models);
+        $this->assertCount(30, $models[1]->getDays());
+        $this->assertArrayHasKey('2017-06-01', $models[1]->getDays());
+        $this->assertArrayHasKey('2017-06-30', $models[1]->getDays());
+        $this->assertArrayNotHasKey('2017-06-31', $models[1]->getDays());
+
+//        var_dump($models);
+    }
+
     public function dataProvider(): array
     {
         return [
@@ -101,50 +107,5 @@ class PropertyControllerTest extends WebTestCase
                 ]
             ],
         ];
-    }
-
-    private function loadDevFixtures()
-    {
-        $registry = self::$client->getContainer()->get('doctrine');
-        $registry->getConnection()->beginTransaction();
-
-        $inputDefinition = new InputDefinition([
-            new InputOption('env', 'e', InputOption::VALUE_OPTIONAL, '', 'test'),
-
-        ]);
-
-        $application = new Application(self::$client->getKernel());
-        $application->setDefinition($inputDefinition);
-
-        $fixtureCommand = self::$client
-            ->getContainer()
-            ->get('hautelook_alice.console.command.doctrine.doctrine_orm_load_data_fixtures_command');
-        $input = new ArrayInput([]);
-        $input->setInteractive(false);
-        $fixtureCommand->setApplication($application);
-        // Use ConsoleOutput to view the Fixtures command service output
-//        $fixtureCommand->run($input, new ConsoleOutput());
-        $fixtureCommand->run($input, new NullOutput());
-    }
-
-    /**
-     * @param string $file
-     */
-    private function loadFixtureFile(string $file)
-    {
-        $registry = self::$client->getContainer()->get('doctrine');
-        $registry->getConnection()->beginTransaction();
-
-        /** @var EntityManager $em */
-        $em = $registry->getManager();
-
-        $loader = new NativeLoader();
-        $objectSet = $loader->loadFile($file);
-
-        foreach ($objectSet->getObjects() as $object) {
-            $em->persist($object);
-        }
-
-        $em->flush();
     }
 }

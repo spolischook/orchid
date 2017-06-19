@@ -4,10 +4,11 @@ namespace AppBundle\Controller\API;
 
 use AppBundle\Entity\Property;
 use AppBundle\Model\RequestValidationErrorList;
-use Doctrine\Bundle\DoctrineBundle\Registry as DoctrineRegistry;
+use AppBundle\Repository\PropertyCalendarRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcher;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,9 +23,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PropertyController extends FOSRestController
 {
     /**
-     * @var DoctrineRegistry
+     * @var PropertyCalendarRepository
      */
-    private $registry;
+    private $propertyCalendarRepository;
 
     /**
      * @var ValidatorInterface
@@ -37,17 +38,19 @@ class PropertyController extends FOSRestController
     private $serializer;
 
     /**
-     * @param DoctrineRegistry $registry
+     * @param PropertyCalendarRepository $propertyCalendarRepository
      */
-    public function __construct(DoctrineRegistry $registry, ValidatorInterface $validator, Serializer $serializer)
-    {
-        $this->registry = $registry;
+    public function __construct(
+        PropertyCalendarRepository $propertyCalendarRepository,
+        ValidatorInterface $validator,
+        Serializer $serializer
+    ) {
+        $this->propertyCalendarRepository = $propertyCalendarRepository;
         $this->validator = $validator;
         $this->serializer = $serializer;
     }
 
     /**
-//     * @Rest\View(serializerGroups={"property_list"})
      * @Rest\QueryParam(name="year", nullable=true, description="By default current year")
      * @Rest\QueryParam(name="month", nullable=true, description="By default current month")
      * @param ParamFetcher $paramFetcher
@@ -79,9 +82,13 @@ class PropertyController extends FOSRestController
             return new Response($this->serializer->serialize($requestErrors, 'json'), 400);
         }
 
-        return $this->registry
-            ->getManager()
-            ->getRepository(Property::class)
-            ->findAll();
+        return new Response(
+            $this->serializer->serialize(
+                $this->propertyCalendarRepository->getAllByYearAndMonth($year, $month),
+                'json',
+                SerializationContext::create()->setGroups(['property_calendar'])->setSerializeNull(true)
+            ),
+            200
+        );
     }
 }

@@ -29,7 +29,13 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
-    data_fixtures.provider.foo:
-        class: AppBundle\DataFixtures\Faker\Provider\DayDateProvider
+    app.data_fixtures.provider.day_date_provider:
+        class: AppBundle\DataFixtures\Provider\DayDateProvider
         tags: [ { name: nelmio_alice.faker.provider } ]
 
+    app.repository.property_calendar_repository:
+        class: AppBundle\Repository\PropertyCalendarRepository
+        public: true
+        arguments:
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:Property')"
+            - "@=service('doctrine.orm.entity_manager').getRepository('AppBundle:PropertyDay')"
