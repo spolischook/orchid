@@ -29,6 +29,7 @@ class Property
      * @var string
      *
      * @ORM\Column(name="title", type="string")
+     * @JMS\Groups({"property_list"})
      */
     private $title;
 

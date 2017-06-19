@@ -54,8 +54,9 @@ class PropertyController extends FOSRestController
      */
     public function calendarAction(ParamFetcher $paramFetcher)
     {
-        $month = $paramFetcher->get('month');
-        $year = $paramFetcher->get('year');
+        $today = new \DateTime();
+        $month = $paramFetcher->get('month') !== null ? $paramFetcher->get('month'): $today->format('m');
+        $year = $paramFetcher->get('year') !== null ? $paramFetcher->get('year') : $today->format('Y');
 
         $requestErrors = new RequestValidationErrorList();
         $requestErrors->addQueryErrors(

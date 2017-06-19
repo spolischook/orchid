@@ -77,22 +77,27 @@ class PropertyControllerTest extends WebTestCase
     {
         return [
             [
-                'requestParams' => [],
-                'queryErrors' => [
-                    'month' => ['This value should not be null'],
-                    'year' => ['This value should not be null'],
-                ]
-            ],
-            [
                 'requestParams' => ['month' => 13, 'year' => 2017],
                 'queryErrors' => [
                     'month' => ['This value should be less than or equal to 12'],
                 ]
             ],
             [
+                'requestParams' => ['month' => 0, 'year' => 2017],
+                'queryErrors' => [
+                    'month' => ['This value should be greater than or equal to 1'],
+                ]
+            ],
+            [
                 'requestParams' => ['month' => 5, 'year' => 3017],
                 'queryErrors' => [
                     'year' => ['This value should be less than or equal to 2099.'],
+                ]
+            ],
+            [
+                'requestParams' => ['month' => 5, 'year' => 0],
+                'queryErrors' => [
+                    'year' => ['This value should be greater than or equal to 2016.'],
                 ]
             ],
         ];
