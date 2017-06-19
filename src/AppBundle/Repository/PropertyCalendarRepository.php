@@ -55,6 +55,5 @@ class PropertyCalendarRepository
 
     public function patch(PropertyCalendar $propertyCalendar)
     {
-
     }
 }
