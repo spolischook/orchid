@@ -52,12 +52,15 @@ class PropertyCalendar
             $dayDate = clone $date;
             $dayDate->setDate($date->format('Y'), $date->format('m'), $i);
 
-            if (!isset($this->days[$dayDate->format('Y-m-d')])) {
-                $propertyDay = new PropertyDay();
-                $propertyDay->setProperty($this->property);
-                $propertyDay->setDate($dayDate);
-                $this->days[$dayDate->format('Y-m-d')] = $propertyDay;
+            if (isset($this->days[$dayDate->format('Y-m-d')])) {
+                continue;
             }
+
+            $propertyDay = new PropertyDay();
+            $propertyDay->setProperty($this->property);
+            $propertyDay->setDate($dayDate);
+
+            $this->days[$dayDate->format('Y-m-d')] = $propertyDay;
         }
 
         uksort($this->days, [$this, 'cmp']);

@@ -91,4 +91,20 @@ class PropertyController extends FOSRestController
             200
         );
     }
+
+    /**
+     * @Rest\QueryParam(name="dateFrom")
+     * @Rest\QueryParam(name="dateTo")
+     */
+    public function patchDaysAttributesAction($id, ParamFetcher $paramFetcher)
+    {
+        $dateFrom = \DateTime::createFromFormat('Y-m-d', $paramFetcher->get('dateFrom'));
+        $dateTo = \DateTime::createFromFormat('Y-m-d', $paramFetcher->get('dateTo'));
+
+        return [$dateFrom, $dateTo];
+    }
+
+    public function patchDayAttributesAction($id, $dayId)
+    {
+    }
 }

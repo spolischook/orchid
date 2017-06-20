@@ -2,6 +2,7 @@
 
 namespace Tests\Functional\AppBundle\Controller\API;
 
+use AppBundle\Entity\Property;
 use AppBundle\Model\PropertyCalendar;
 use AppBundle\Model\RequestValidationErrorList;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -60,6 +61,39 @@ class PropertyControllerTest extends AbstractFixtureTestCase
         }
     }
 
+    public function testPatchDaysAttributesAction()
+    {
+        /** @var Property $property */
+        $property = self::$client->getContainer()->get('doctrine')->getRepository(Property::class)->findOneBy([]);
+        $today = new \DateTime();
+        $tomorrow = new \DateTime('+1 day');
+        self::$client->request(
+            'PATCH',
+            sprintf(
+                '/properties/%s/days/attributes?dateFrom=%s&dateTo=%s',
+                $property->getId(),
+                $today->format('Y-m-d'),
+                $tomorrow->format('Y-m-d')
+            ),
+            [],
+            [],
+            [],
+            json_encode([
+                'available' => 4,
+                'price' => 100500,
+            ])
+        );
+
+        $response = self::$client->getResponse();
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(
+            'application/json',
+            $response->headers->get('content-type')
+        );
+
+        var_dump($response->getContent());
+    }
+
     public function testCalendarResource()
     {
         self::$client->request('GET', '/properties/calendar', ['month' => 6, 'year' => 2017]);
@@ -75,8 +109,6 @@ class PropertyControllerTest extends AbstractFixtureTestCase
         $this->assertArrayHasKey('2017-06-01', $models[1]->getDays());
         $this->assertArrayHasKey('2017-06-30', $models[1]->getDays());
         $this->assertArrayNotHasKey('2017-06-31', $models[1]->getDays());
-
-//        var_dump($models);
     }
 
     public function dataProvider(): array

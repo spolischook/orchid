@@ -41,7 +41,7 @@ paths:
               $ref: '#/definitions/PropertyCalendar'
         '400':
           description: If invalid values was delivered with request parameters
-  '/properties/{id}/propertyDays/attributes':
+  '/properties/{id}/days/attributes':
     patch:
       description: Update properties availability and price
       parameters:
@@ -85,9 +85,11 @@ paths:
       responses:
         '204':
           description: Successful update
+        '400':
+          description: In case of bad body, e.g. availability is more then property inventory
         '404':
           description: If property with given id was not found
-  '/properies/{id}/propertyDays/{id}':
+  '/properies/{id}/days/{dayId}/attributes':
     patch:
       description: Update property availability and price
       parameters:
@@ -96,15 +98,22 @@ paths:
           description: Property identificator
           required: true
           type: integer
+        - in: path
+          name: dayId
+          description: PropertyDay identificator
+          required: true
+          type: integer
         - name: propertyDay
           in: body
           description: PropertyDay Model
           required: true
           schema:
-            $ref: '#/definitions/PropertyDay'
+            $ref: '#/definitions/PropertyDayAttributes'
       responses:
         '204':
           description: Successful update
+        '400':
+          description: In case of bad body, e.g. availability is more then property inventory
         '404':
           description: If property with given id was not found
 definitions:
