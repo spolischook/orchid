@@ -30,6 +30,16 @@ class PropertyCalendarTest extends TestCase
         ];
     }
 
+    /**
+     * @expectedException \Psr\Log\InvalidArgumentException
+     * @expectedExceptionMessage Year "-100" and month "-100" cannot be converted to date
+     */
+    public function testBadParameters()
+    {
+        $propertyCalendar = new PropertyCalendar(new Property());
+        $propertyCalendar->generateDays(-100, -100);
+    }
+
     public function testGenerateOnlyEmptyValues()
     {
         $propertyCalendar = new PropertyCalendar(new Property());

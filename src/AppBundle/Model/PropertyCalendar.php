@@ -49,8 +49,9 @@ class PropertyCalendar
         $numberOfDays = (int) $date->format('t');
 
         for ($i = 1; $i <= $numberOfDays; $i++) {
-            $dateKey = sprintf('%s-%s-%s', $date->format('Y'), $date->format('m'), $i);
-            $dayDate = \DateTime::createFromFormat('Y-m-d', $dateKey);
+            $dayDate = clone $date;
+            $dayDate->setDate($date->format('Y'), $date->format('m'), $i);
+
             if (!isset($this->days[$dayDate->format('Y-m-d')])) {
                 $propertyDay = new PropertyDay();
                 $propertyDay->setProperty($this->property);
