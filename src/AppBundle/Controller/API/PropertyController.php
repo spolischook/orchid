@@ -95,6 +95,7 @@ class PropertyController extends FOSRestController
     /**
      * @Rest\QueryParam(name="dateFrom")
      * @Rest\QueryParam(name="dateTo")
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function patchDaysAttributesAction($id, ParamFetcher $paramFetcher)
     {
@@ -104,6 +105,11 @@ class PropertyController extends FOSRestController
         return [$dateFrom, $dateTo];
     }
 
+    /**
+     * @param $id
+     * @param $dayId
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function patchDayAttributesAction($id, $dayId)
     {
     }
