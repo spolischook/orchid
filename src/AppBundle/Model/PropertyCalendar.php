@@ -5,6 +5,7 @@ namespace AppBundle\Model;
 use AppBundle\Entity\Property;
 use AppBundle\Entity\PropertyDay;
 use JMS\Serializer\Annotation as JMS;
+use Psr\Log\InvalidArgumentException;
 
 class PropertyCalendar
 {
@@ -35,10 +36,16 @@ class PropertyCalendar
     /**
      * @param int $year 4 number of year accepted by DateTime object, e.g. 2017
      * @param int $month Month number accepted by DateTime object
+     * @throws \Psr\Log\InvalidArgumentException
      */
     public function generateDays(int $year, int $month)
     {
         $date = \DateTime::createFromFormat('Y-m', $year.'-'.$month);
+        if (!$date) {
+            throw new InvalidArgumentException(
+                sprintf('Year "%s" and month "%s" cannot be converted to date', $year, $month)
+            );
+        }
         $numberOfDays = (int) $date->format('t');
 
         for ($i = 1; $i <= $numberOfDays; $i++) {

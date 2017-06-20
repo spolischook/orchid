@@ -172,7 +172,7 @@ class PropertyDay
      *
      * @return int
      */
-    public function getPrice(): ?int
+    public function getPrice(): ? int
     {
         return $this->price;
     }
@@ -190,8 +190,8 @@ class PropertyDay
         $this->dayOfTheWeek = $date->format('D');
         $this->isWeekday = in_array($this->dayOfTheWeek, $this->getWeekdays(), true);
         $this->isWeekend = in_array($this->dayOfTheWeek, $this->getWeekends(), true);
-        $this->month = $date->format('m');
-        $this->year = $date->format('Y');
+        $this->month = (int) $date->format('m');
+        $this->year = (int) $date->format('Y');
 
         return $this;
     }
@@ -271,7 +271,7 @@ class PropertyDay
     /**
      * @return int
      */
-    public function getAvailable(): ?int
+    public function getAvailable(): ? int
     {
         return $this->available;
     }
